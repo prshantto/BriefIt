@@ -11,7 +11,7 @@ export function Header({ title, subtitle }) {
       <h1 className="text-4xl italic font-bold text-indigo-600 mb-4">
         {title}
       </h1>
-      <p className="text-gray-600 text-lg">{subtitle}</p>
+      <p className="text-gray-600 text-lg px-5 lg:px-0">{subtitle}</p>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import Spinner from "./Spinner";
-// import { Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export function UrlForm({ url, setUrl, loading, onSubmit }) {
   return (
@@ -17,12 +16,12 @@ export function UrlForm({ url, setUrl, loading, onSubmit }) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[160px]"
         >
           {loading ? (
             <>
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
-              Summarizing...
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Summarizing...</span>
             </>
           ) : (
             "Summarize"

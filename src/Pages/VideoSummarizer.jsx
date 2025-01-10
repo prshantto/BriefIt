@@ -15,6 +15,7 @@ export function VideoSummarizer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     // Placeholder for backend integration
     try {
