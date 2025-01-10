@@ -2,39 +2,44 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import "./Form.css";
-import { useSignInEmailPassword } from "@nhost/react";
+import { useSignInEmailPasswordless } from "@nhost/react";
 import Spinner from "../components/Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [Error, setError] = useState(null);
 
-  const {
-    signInEmailPassword,
-    needsEmailVerification,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useSignInEmailPassword();
+  const { signInEmailPasswordless, error } = useSignInEmailPasswordless();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    signInEmailPassword({
-      email,
-      password,
+
+    setLoading(true);
+
+    await signInEmailPasswordless(email, {
+      displayName: `${firstname} ${lastname}`,
+      metadata: {
+        firstname: firstname,
+        lastname: lastname,
+      },
     });
-    console.log({ email, password });
+
+    if (error) {
+      setError(error.message);
+      console.error(error);
+      return;
+    }
+
+    setLoading(false);
+    setIsSuccess(true);
+
     setEmail("");
-    setPassword("");
   };
-
-  if (isSuccess) {
-    navigate("/");
-  }
-
-  const disableForm = isLoading || needsEmailVerification;
 
   return (
     <div className="auth-container">
@@ -49,16 +54,47 @@ const Login = () => {
         <div className="form-content">
           <div className="form-title">
             <h2>Sign in to BriefIt</h2>
-            <p>Welcome back! Please sign in to continue</p>
           </div>
 
-          {needsEmailVerification ? (
-            <div className="error-message">
-              Please verify your email before logging in.
+          {isSuccess ? (
+            <div>
+              <p className="text-gray-600">
+                <span>Hey! {firstname}</span> Please check your email to verify
+                your account. If you haven&apos;t received the verification
+                email, please check your spam folder.
+              </p>
+              <button
+                className=" w-full py-2 px-4 mt-8 bg-indigo-600 text-white border-none rounded-md font-bold cursor-pointer transition-colors duration-200 hover:bg-indigo-700"
+                onClick={() => navigate("/login")}
+              >
+                Send Again
+              </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="form-group">
+                <div className="name-inputs">
+                  <div className="form-group">
+                    <label htmlFor="firstname">First Name</label>
+                    <input
+                      type="text"
+                      value={firstname}
+                      onChange={(e) => setFirstname(e.target.value)}
+                      placeholder="First Name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="lastname">Last Name</label>
+                    <input
+                      type="text"
+                      value={lastname}
+                      onChange={(e) => setLastname(e.target.value)}
+                      placeholder="Last Name"
+                      required
+                    />
+                  </div>
+                </div>
                 <label htmlFor="email">Email</label>
                 <input
                   value={email}
@@ -70,33 +106,21 @@ const Login = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-
-              <button type="submit" className="submit-button">
-                {isLoading ? <Spinner /> : "Sign In"}
+              <button
+                onClick={() => setLoading(true)}
+                type="submit"
+                className="submit-button"
+              >
+                {loading ? <Spinner /> : "Get Magic Link!"}
               </button>
 
-              {isError && <div className="error-message">{error.message}</div>}
-              {console.log(error)}
+              {Error && <div className="error-message">{Error}</div>}
             </form>
           )}
         </div>
 
         <div className="form-footer">
-          <p>
-            Don't have an account?{" "}
-            <span onClick={() => navigate("/signup")}>Sign-up here</span>
-          </p>
+          <p>Welcome back! Please sign in to continue</p>
         </div>
       </div>
     </div>

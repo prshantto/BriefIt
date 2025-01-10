@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { Loader2 } from "lucide-react";
+import Spinner from "./Spinner";
+// import { Loader2 } from "lucide-react";
 
 export function UrlForm({ url, setUrl, loading, onSubmit }) {
   return (
@@ -20,7 +21,7 @@ export function UrlForm({ url, setUrl, loading, onSubmit }) {
         >
           {loading ? (
             <>
-              <Loader2 className="animate-spin h-5 w-5" />
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
               Summarizing...
             </>
           ) : (

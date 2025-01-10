@@ -94,6 +94,8 @@
 }
 
 .form-footer {
+  font-size: 1rem;
+  font-weight: 600;
   padding: 1rem;
   background: #f9fafb;
   border-top: 1px solid #e5e7eb;

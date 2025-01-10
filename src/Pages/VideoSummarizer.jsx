@@ -4,10 +4,9 @@ import { UrlForm } from "../components/UrlForm";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SummaryResult } from "../components/SummaryResult";
 import { Features } from "../components/Features";
-import { useNavigate } from "react-router-dom";
+import ProfileButton from "../components/ProfileButton";
 
 export function VideoSummarizer() {
-  const navigate = useNavigate();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -36,6 +35,7 @@ export function VideoSummarizer() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6">
+      <ProfileButton />
       <div className="max-w-4xl mx-auto">
         <Header
           title="BriefIt"

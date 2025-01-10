@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { VideoSummarizer } from "./Pages/VideoSummarizer";
 import { NhostClient, NhostProvider } from "@nhost/react";
+import { NhostApolloProvider } from "@nhost/react-apollo";
 import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
 import ProtectRoute from "./components/ProtectRoute";
 
 const nhost = new NhostClient({
@@ -13,18 +13,19 @@ const nhost = new NhostClient({
 function App() {
   return (
     <NhostProvider nhost={nhost}>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectRoute>
-              <VideoSummarizer />
-            </ProtectRoute>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
+      <NhostApolloProvider nhost={nhost}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectRoute>
+                <VideoSummarizer />
+              </ProtectRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </NhostApolloProvider>
     </NhostProvider>
   );
 }

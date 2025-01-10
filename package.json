@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.12.5",
     "@nhost/react": "^3.8.1",
+    "@nhost/react-apollo": "^15.0.1",
     "graphql": "^16.10.0",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
