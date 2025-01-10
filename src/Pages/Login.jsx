@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
+import { useSetRecoilState } from "recoil";
+import { isLoggedIn } from "../atom";
 import "./Form.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const setIsLoggedin = useSetRecoilState(isLoggedIn);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -12,6 +15,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ email, password });
+    setIsLoggedin(true);
     setEmail("");
     setPassword("");
   };
