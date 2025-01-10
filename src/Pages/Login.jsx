@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
-import { useSetRecoilState } from "recoil";
-import { isLoggedIn } from "../atom";
 import "./Form.css";
 import { useSignInEmailPassword } from "@nhost/react";
 import Spinner from "../components/Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
-  const setIsLoggedin = useSetRecoilState(isLoggedIn);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,7 +26,6 @@ const Login = () => {
       password,
     });
     console.log({ email, password });
-    setIsLoggedin(true);
     setEmail("");
     setPassword("");
   };

@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
-import { useSetRecoilState } from "recoil";
-import { isLoggedIn } from "../atom";
 import "./Form.css";
 import { useSignUpEmailPassword } from "@nhost/react";
 import Spinner from "../components/Spinner";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const setIsLoggedin = useSetRecoilState(isLoggedIn);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -58,8 +55,6 @@ const Signup = () => {
       email: "",
       password: "",
     });
-
-    setIsLoggedin(true);
   };
 
   if (isSuccess) {
