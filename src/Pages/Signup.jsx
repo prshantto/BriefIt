@@ -1,17 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
+import { useSetRecoilState } from "recoil";
+import { isLoggedIn } from "../atom";
 import "./Form.css";
+import { useSignUpEmailPassword } from "@nhost/react";
+import Spinner from "../components/Spinner";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const setIsLoggedin = useSetRecoilState(isLoggedIn);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
+
+  const {
+    signUpEmailPassword,
+    needsEmailVerification,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+    watchEffect,
+  } = useSignUpEmailPassword();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,16 +35,38 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    console.log(formData.email);
+
+    await signUpEmailPassword({
+      email: "formData.email",
+      password: formData.password,
+      user: {
+        displayName: `${formData.firstname} ${formData.lastname}`,
+        metadata: {
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+        },
+      },
+    });
+
     setFormData({
       firstname: "",
       lastname: "",
       email: "",
       password: "",
     });
+
+    setIsLoggedin(true);
   };
+
+  if (isSuccess) {
+    navigate("/");
+  }
+
+  const disableForm = isLoading || needsEmailVerification;
 
   return (
     <div className="auth-container">
@@ -48,68 +84,79 @@ const Signup = () => {
             <p>Welcome! Please fill in the details to get started.</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="name-inputs">
+          {needsEmailVerification ? (
+            <p>
+              Please check your email to verify your account. If you
+              haven&apos;t received the verification email, please check your
+              spam folder.
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="name-inputs">
+                <div className="form-group">
+                  <label htmlFor="firstname">First Name</label>
+                  <input
+                    id="firstname"
+                    name="firstname"
+                    type="text"
+                    value={formData.firstname}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    required
+                    disabled={disableForm}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lastname">Last Name</label>
+                  <input
+                    id="lastname"
+                    name="lastname"
+                    type="text"
+                    value={formData.lastname}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    required
+                    disabled={disableForm}
+                  />
+                </div>
+              </div>
               <div className="form-group">
-                <label htmlFor="firstname">First Name</label>
+                <label htmlFor="email">Email</label>
                 <input
-                  id="firstname"
-                  name="firstname"
-                  type="text"
-                  value={formData.firstname}
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  placeholder="First Name"
+                  placeholder="Enter your email"
                   required
+                  disabled={disableForm}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="lastname">Last Name</label>
+                <label htmlFor="password">Password</label>
                 <input
-                  id="lastname"
-                  name="lastname"
-                  type="text"
-                  value={formData.lastname}
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
                   onChange={handleChange}
-                  placeholder="Last Name"
+                  placeholder="Create a password"
                   required
+                  disabled={disableForm}
                 />
               </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Create a password"
-                required
-              />
-            </div>
-
-            <button type="submit" className="submit-button">
-              Sign Up
-            </button>
-
-            {errors.error && (
-              <div className="error-message">{errors.error}</div>
-            )}
-          </form>
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={disableForm}
+              >
+                {isLoading ? <Spinner /> : <span>Sign Up</span>}
+              </button>
+              {isError && <div className="error-message">{error.message}</div>}
+              {console.log(error)}
+            </form>
+          )}
         </div>
 
         <div className="form-footer">
@@ -124,140 +171,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// // import axios from "axios";
-// import "./Form.css";
-// import { Header } from "../components/Header";
-
-// const Signup = () => {
-//   const [firstname, setFirstname] = useState("");
-//   const [lastname, setLastname] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [errors, setErrors] = useState([]);
-//   const navigate = useNavigate();
-
-//   const handeleSubmit = (e) => {
-//     e.preventDefault();
-//     const user = {
-//       firstname,
-//       lastname,
-//       email,
-//       password,
-//     };
-//     console.log(user);
-//     // axios
-//     //   .post(`${import.meta.env.VITE_API_URL}/api/users/register`, user)
-//     //   .then((res) => {
-//     //     console.log(res);
-//     //     if (res.status === 201) {
-//     //       navigate("/login");
-//     //     }
-//     //   })
-//     //   .catch((err) => {
-//     //     const errorMessage =
-//     //       err.response?.data?.errors?.[0]?.msg ||
-//     //       err.response?.data?.message ||
-//     //       "Could not register";
-//     //     console.log(err);
-//     //     setErrors({ error: errorMessage });
-//     //   });
-//     setFirstname("");
-//     setLastname("");
-//     setEmail("");
-//     setPassword("");
-//   };
-//   return (
-//     <div className="body">
-//       <div className="mt-2">
-//         <Header
-//           title="BriefIt"
-//           subtitle="Get concise summaries of YouTube videos in seconds"
-//         />
-//       </div>
-
-//       <div className="container">
-//         <div className="form-header">
-//           <h2>
-//             Create your account
-//             <p className="welcome-message text-sm">
-//               Welcome! Please fill in the details to get started.
-//             </p>
-//           </h2>
-
-//           <form onSubmit={handeleSubmit}>
-//             <div className="form-group">
-//               <label htmlFor="name">Name</label>
-//               <div className="name-inputs">
-//                 <input
-//                   value={firstname}
-//                   onChange={(e) => setFirstname(e.target.value)}
-//                   type="text"
-//                   id="firstname"
-//                   name="firstname"
-//                   placeholder="First Name"
-//                   required
-//                 />
-//                 <input
-//                   value={lastname}
-//                   onChange={(e) => setLastname(e.target.value)}
-//                   type="text"
-//                   id="lastname"
-//                   name="lastname"
-//                   placeholder="Last Name"
-//                   required
-//                 />
-//               </div>
-//             </div>
-
-//             <div className="form-group">
-//               <label htmlFor="email">Email</label>
-//               <input
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//                 type="email"
-//                 id="email"
-//                 name="email"
-//                 placeholder="Enter your email"
-//                 required
-//               />
-//             </div>
-
-//             <div className="form-group">
-//               <label htmlFor="password">Password</label>
-//               <input
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 type="password"
-//                 id="password"
-//                 name="password"
-//                 placeholder="Create a password"
-//                 required
-//               />
-//             </div>
-
-//             <button type="submit" className="btn">
-//               Sign Up
-//             </button>
-
-//             {Object.keys(errors).length > 0 ? (
-//               <div className="error-message">{errors.error}</div>
-//             ) : null}
-//           </form>
-//         </div>
-//         <div className="form-footer">
-//           <p>
-//             Already have an account?{" "}
-//             <span className="link" onClick={() => navigate("/login")}>
-//               Login here
-//             </span>
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Signup;

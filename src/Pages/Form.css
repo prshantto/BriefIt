@@ -112,6 +112,7 @@
 }
 
 .error-message {
+  text-align: center;
   margin-top: 1rem;
   padding: 0.75rem;
   background: #fee2e2;
