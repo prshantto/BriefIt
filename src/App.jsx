@@ -18,10 +18,9 @@ function App() {
           <Route
             path="/"
             element={
-              <VideoSummarizer />
-
-              // <ProtectRoute>
-              // </ProtectRoute>
+              <ProtectRoute>
+                <VideoSummarizer />
+              </ProtectRoute>
             }
           />
           <Route path="/login" element={<Login />} />
