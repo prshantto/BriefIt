@@ -5,6 +5,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { SummaryResult } from "../components/SummaryResult";
 import { Features } from "../components/Features";
 import ProfileButton from "../components/ProfileButton";
+import axios from "axios";
 
 export function VideoSummarizer() {
   const [url, setUrl] = useState("");
@@ -16,16 +17,52 @@ export function VideoSummarizer() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    console.log(url);
 
     // Placeholder for backend integration
     try {
-      // This will be replaced with actual Nhost backend call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setResult({
-        title: "Sample Video Title",
-        summary: "This is where the AI-generated summary will appear...",
-        duration: "10:30",
-      });
+      axios
+        .post(
+          `${import.meta.env.VITE_REQUEST_URL}?key=${
+            import.meta.env.VITE_GEMINI_API_KEY
+          }`,
+          {
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `Get summary of video from youtube url ${url} with video titel and duration in object format`,
+                  },
+                ],
+              },
+            ],
+          }
+        )
+        .then((response) => {
+          const jsonData = response.data.candidates[0].content.parts[0].text;
+          const cleanedData = jsonData.replace(/```/g, ""); // Parse JSON data
+          console.log(cleanedData);
+          console.log(response.data.candidates[0].content.parts[0].text.title);
+          console.log(
+            response.data.candidates[0].content.parts[0].text.summary
+          );
+          console.log(
+            response.data.candidates[0].content.parts[0].text.duration
+          );
+          setResult({
+            title:
+              response.data.candidates[0].content.parts[0].text.title ||
+              "undefined",
+            summary: response.data.candidates[0].content.parts[0].text,
+            duration:
+              response.data.candidates[0].content.parts[0].text.duration ||
+              "undefined",
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("Failed to generate summary. Please try again.");
+        });
     } catch (err) {
       console.error(err);
       setError("Failed to generate summary. Please try again.");
