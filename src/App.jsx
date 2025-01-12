@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { VideoSummarizer } from "./Pages/VideoSummarizer";
 import { NhostClient, NhostProvider } from "@nhost/react";
 import { NhostApolloProvider } from "@nhost/react-apollo";
-import Login from "./Pages/Login";
+import Auth from "./Pages/Auth";
 import ProtectRoute from "./components/ProtectRoute";
 
 const nhost = new NhostClient({
@@ -23,7 +23,7 @@ function App() {
               </ProtectRoute>
             }
           />
-          <Route path="/login" element={<Login />} />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
       </NhostApolloProvider>
     </NhostProvider>

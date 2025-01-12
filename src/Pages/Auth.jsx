@@ -65,7 +65,7 @@ const Login = () => {
               </p>
               <button
                 className=" w-full py-2 px-4 mt-8 bg-indigo-600 text-white border-none rounded-md font-bold cursor-pointer transition-colors duration-200 hover:bg-indigo-700"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/auth")}
               >
                 Send Again
               </button>
