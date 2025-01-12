@@ -18,3 +18,7 @@ To install and run BriefIt, follow these steps:
    ```bash
    git clone https://github.com/prshantto/BriefIt.git
    ```
+
+## Live Demo
+
+You can access the live demo of BriefIt at [https://briefit.prshantsingh.tech](https://briefit.prshantsingh.tech/).
