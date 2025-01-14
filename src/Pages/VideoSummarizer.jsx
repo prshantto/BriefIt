@@ -5,6 +5,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { SummaryResult } from "../components/SummaryResult";
 import { Features } from "../components/Features";
 import ProfileButton from "../components/ProfileButton";
+import axios from "axios";
 
 export function VideoSummarizer() {
   const [url, setUrl] = useState("");
@@ -17,15 +18,37 @@ export function VideoSummarizer() {
     setError("");
     setLoading(true);
 
-    // Placeholder for backend integration
     try {
-      // This will be replaced with actual Nhost backend call
+      axios
+        .get(`${import.meta.env.VITE_API_URL}/get-yt-video?url=${url}`)
+        .then((res) => {
+          axios
+            .post(
+              `${import.meta.env.VITE_GEMINI_API_URL}?key=${
+                import.meta.env.VITE_GEMINI_API_KEY
+              }`,
+              {
+                contents: [
+                  {
+                    parts: [
+                      {
+                        text: `Summarize the following video, here is the description: ${res.data.description.content} and here is the title: ${res.data.title}`,
+                      },
+                    ],
+                  },
+                ],
+              }
+            )
+            .then((aiResponse) => {
+              setResult({
+                title: res.data.title,
+                summary: aiResponse.data.candidates[0].content.parts[0].text,
+                duration: "Unknown",
+                thumbnail: res.data.thumbnail,
+              });
+            });
+        });
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      setResult({
-        title: "Sample Video Title",
-        summary: "This is where the AI-generated summary will appear...",
-        duration: "10:30",
-      });
     } catch (err) {
       console.error(err);
       setError("Failed to generate summary. Please try again.");
