@@ -6,7 +6,6 @@ const ProfileButton = () => {
   const [showProfile, setShowProfile] = useState(false);
   const { signOut } = useSignOut();
   const user = useUserData();
-  console.log(user);
 
   const handleToggleProfile = () => {
     setShowProfile(!showProfile);
