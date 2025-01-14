@@ -18,11 +18,11 @@ function App() {
           <Route
             path="/"
             element={
-              <VideoSummarizer />
+              // <VideoSummarizer />
 
-              // <ProtectRoute>
-              //   <VideoSummarizer />
-              // </ProtectRoute>
+              <ProtectRoute>
+                <VideoSummarizer />
+              </ProtectRoute>
             }
           />
           <Route path="/auth" element={<Auth />} />
