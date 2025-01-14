@@ -19,36 +19,21 @@ export function VideoSummarizer() {
     setLoading(true);
 
     try {
-      axios
-        .get(`${import.meta.env.VITE_API_URL}/get-yt-video?url=${url}`)
-        .then((res) => {
-          axios
-            .post(
-              `${import.meta.env.VITE_GEMINI_API_URL}?key=${
-                import.meta.env.VITE_GEMINI_API_KEY
-              }`,
-              {
-                contents: [
-                  {
-                    parts: [
-                      {
-                        text: `Summarize the following video, here is the description: ${res.data.description.content} and here is the title: ${res.data.title}`,
-                      },
-                    ],
-                  },
-                ],
-              }
-            )
-            .then((aiResponse) => {
-              setResult({
-                title: res.data.title,
-                summary: aiResponse.data.candidates[0].content.parts[0].text,
-                duration: "Unknown",
-                thumbnail: res.data.thumbnail,
-              });
-            });
-        });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/get-yt-video?url=${url}`
+      );
+      const aiResponse = await axios.post(
+        `${import.meta.env.VITE_API_URL}/ai-response`,
+        {
+          prompt: `Summarize the following video, here is the description: ${res.data.description.content} and here is the title: ${res.data.title}`,
+        }
+      );
+      setResult({
+        title: res.data.title,
+        summary: aiResponse.data.candidates[0].content.parts[0].text,
+        duration: "Unknown",
+        thumbnail: res.data.thumbnail,
+      });
     } catch (err) {
       console.error(err);
       setError("Failed to generate summary. Please try again.");
