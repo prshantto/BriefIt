@@ -19,9 +19,9 @@ export function VideoSummarizer() {
     setLoading(true);
 
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/get-yt-video?url=${url}`
-      );
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/getvideo`, {
+        url: url,
+      });
 
       const transcript = await axios.post(
         `${import.meta.env.VITE_API_URL}/gettranscript`,
@@ -32,7 +32,7 @@ export function VideoSummarizer() {
       console.log(transcript);
 
       const aiResponse = await axios.post(
-        `${import.meta.env.VITE_API_URL}/ai-response`,
+        `${import.meta.env.VITE_API_URL}/airesponse`,
         {
           prompt: `Summarize the following video in minimum 100 words, here is the transcript: ${transcript.data} and here is the title: ${res.data.title}`,
         }

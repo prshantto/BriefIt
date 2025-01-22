@@ -29,7 +29,7 @@ export function SummaryResult({ result }) {
               {result.title}
             </h2>
             <img
-              className="w-[40%] h-auto bg-gray-200 rounded-lg mt-4"
+              className="w-full h-auto bg-gray-200 rounded-lg mt-4"
               src={result.thumbnail}
               alt="thumbnain"
             />
