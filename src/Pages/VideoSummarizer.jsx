@@ -23,18 +23,17 @@ export function VideoSummarizer() {
         url: url,
       });
 
-      const transcript = await axios.post(
+      const transcriptresponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/gettranscript`,
         {
           url: url,
         }
       );
-      console.log(transcript);
 
       const aiResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/airesponse`,
         {
-          prompt: `Summarize the following video in minimum 100 words, here is the transcript: ${transcript.data} and here is the title: ${res.data.title}`,
+          prompt: `Summarize the following video in minimum 100 words dont miss any points and explain properly by breaking it in one or two paragraphs, here is the transcript: ${transcriptresponse.data.transcript} and here is the title: ${res.data.title}`,
         }
       );
       setResult({
@@ -43,6 +42,7 @@ export function VideoSummarizer() {
         duration: "Unknown",
         thumbnail: res.data.thumbnail,
       });
+      console.log(aiResponse.data.candidates[0].content.parts[0].text);
     } catch (err) {
       console.error(err);
       setError("Failed to generate summary. Please try again.");
