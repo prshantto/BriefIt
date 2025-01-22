@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthenticationStatus } from "@nhost/react";
 import Spinner from "./Spinner";

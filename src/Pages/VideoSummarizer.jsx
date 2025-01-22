@@ -22,10 +22,19 @@ export function VideoSummarizer() {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/get-yt-video?url=${url}`
       );
+
+      const transcript = await axios.post(
+        `${import.meta.env.VITE_API_URL}/gettranscript`,
+        {
+          url: url,
+        }
+      );
+      console.log(transcript);
+
       const aiResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/ai-response`,
         {
-          prompt: `Summarize the following video, here is the description: ${res.data.description.content} and here is the title: ${res.data.title}`,
+          prompt: `Summarize the following video in minimum 100 words, here is the transcript: ${transcript.data} and here is the title: ${res.data.title}`,
         }
       );
       setResult({
