@@ -9,7 +9,6 @@ export function SummaryResult({ result }) {
 
   return (
     <>
-      {console.log(isAuthenticated)}
       {!isAuthenticated ? (
         <div className="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 ease-in-out">
           <div className="mb-4 flex flex-col items-center gap-4">
@@ -37,7 +36,9 @@ export function SummaryResult({ result }) {
           <p className="text-gray-500 text-sm">Duration: {result.duration}</p>
           <div className="prose max-w-none">
             <h3 className="text-lg font-medium text-gray-700 mb-3">Summary</h3>
-            <p className="text-gray-600 leading-relaxed">{result.summary}</p>
+            <pre className="text-gray-600 leading-relaxed text-wrap">
+              {result.summary}
+            </pre>
           </div>
         </div>
       )}

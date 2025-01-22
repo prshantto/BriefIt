@@ -33,7 +33,10 @@ export function VideoSummarizer() {
       const aiResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/airesponse`,
         {
-          prompt: `Summarize the following video in minimum 100 words dont miss any points and explain properly by breaking it in one or two paragraphs, here is the transcript: ${transcriptresponse.data.transcript} and here is the title: ${res.data.title}`,
+          prompt: `Summarize the following video using transcript of the video and titele. Explain properly by 
+          breaking it in paragraphs or more points as much as possible and 
+          keep this summary simple and easy to understand in minimum words. 
+          Here is the transcript of video: ${transcriptresponse.data.transcript} and here is the title: ${res.data.title}`,
         }
       );
       setResult({
