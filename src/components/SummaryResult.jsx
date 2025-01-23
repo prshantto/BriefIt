@@ -9,7 +9,7 @@ export function SummaryResult({ result }) {
 
   return (
     <>
-      {isAuthenticated ? (
+      {!isAuthenticated ? (
         <div className="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 ease-in-out">
           <div className="mb-4 flex flex-col items-center gap-4">
             <h1>You are not logged in, login to get the summary</h1>
