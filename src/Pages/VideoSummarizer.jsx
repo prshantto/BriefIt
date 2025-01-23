@@ -45,7 +45,6 @@ export function VideoSummarizer() {
         duration: "Unknown",
         thumbnail: res.data.thumbnail,
       });
-      console.log(aiResponse.data.candidates[0].content.parts[0].text);
     } catch (err) {
       console.error(err);
       setError("Failed to generate summary. Please try again.");
