@@ -6,8 +6,12 @@ import { SummaryResult } from "../components/SummaryResult";
 import { Features } from "../components/Features";
 import ProfileButton from "../components/ProfileButton";
 import axios from "axios";
+import { useAuthenticationStatus } from "@nhost/react";
+import { useNavigate } from "react-router-dom";
 
 export function VideoSummarizer() {
+  const { isAuthenticated } = useAuthenticationStatus();
+  const navigate = useNavigate();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -70,6 +74,21 @@ export function VideoSummarizer() {
         />
 
         <ErrorMessage message={error} />
+
+        {!isAuthenticated && (
+          <div className="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 ease-in-out">
+            <div className="mb-4 flex flex-col items-center gap-4">
+              <h1>You are not logged in, login to get the summary</h1>
+              <button
+                onClick={() => navigate("/auth")}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[160px]"
+              >
+                login
+              </button>
+            </div>
+          </div>
+        )}
+
         <SummaryResult result={result} />
         <Features />
       </div>
