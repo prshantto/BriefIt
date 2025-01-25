@@ -37,11 +37,8 @@ const ProfileButton = () => {
           <div className="profile-dropdown absolute left-0 mt-2 w-[280px] p-4 bg-white rounded-lg shadow-lg border border-gray-200">
             <div className="flex items-center gap-3">
               <img
-                className="w-12 h-12 rounded-full bg-gray-500 object-cover"
-                src={
-                  user?.avatarUrl ||
-                  "https://api.dicebear.com/9.x/pixel-art/svg"
-                }
+                className="w-12 h-12 rounded-full bg-gray-200 shadow-2xl"
+                src="https://api.dicebear.com/9.x/pixel-art/svg"
                 alt="avatar"
               />
               <div className="font-medium">
