@@ -40,7 +40,7 @@ const ProfileButton = () => {
                 className="w-12 h-12 rounded-full bg-gray-500 object-cover"
                 src={
                   user?.avatarUrl ||
-                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                  "https://api.dicebear.com/9.x/pixel-art/svg"
                 }
                 alt="avatar"
               />
